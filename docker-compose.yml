@@ -2,16 +2,20 @@ version: "3.8"
 services:
   gateway:
     image: nginx
+    container_name: gateway
     ports:
       - '80:80'
     volumes:
       - ./configs/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - ms-computer
+      - ms-course
+      - ms-loan
+      - admiralis-db
   admiralis-db:
     image: mongo
     restart: unless-stopped
     container_name: admiralis-db
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoadmin
       MONGO_INITDB_ROOT_PASSWORD: secret
@@ -23,15 +27,11 @@ services:
     image: 0hmygoat/ms-computer:main
     depends_on:
       - admiralis-db
-    ports:
-      - "8081:8081"
   ms-course:
     container_name: ms-course
     image: 0hmygoat/ms-course:main
     depends_on:
       - admiralis-db
-    ports:
-      - "8080:8080"
   ms-loan:
     container_name: ms-loan
     image: 0hmygoat/ms-loan:main
@@ -39,7 +39,8 @@ services:
       - admiralis-db
       - ms-computer
       - ms-course
-    ports:
-      - "8082:8080"
+  front-web:
+    container_name: frontend
+    image: 0hmygoat/front-web:latest
 volumes:
   admiralis-db:
