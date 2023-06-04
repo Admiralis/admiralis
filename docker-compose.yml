@@ -7,6 +7,7 @@ services:
       - '80:80'
     volumes:
       - ./configs/nginx/conf.d/:/etc/nginx/conf.d/
+      - './configs/nginx/ssl/:/etc/nginx/ssl/'
     depends_on:
       - ms-computer
       - ms-course
@@ -41,6 +42,6 @@ services:
       - ms-course
   front-web:
     container_name: frontend
-    image: 0hmygoat/front-web:latest
+    image: 0hmygoat/front-web:main
 volumes:
   admiralis-db:
